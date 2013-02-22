@@ -51,7 +51,7 @@ class GitHubRepoContentRetriever {
 			$content_loc .= "{$content_lines[$i - 1]}\n";
 		}
 		$element_id = 'github-repo-content-'.rand().'-id';
-		$content = "<span id='{$element_id}'><pre class='prettyprint linenums:{$start_loc}'>{$content_loc}</pre></span><script type='text/javascript'>prettyPrint(null, document.getElementById('${element_id}'));</script>";
+		$content = "<pre id='{$element_id}' class='sunlight-highlight-{$language}'>{$content_loc}</pre><script type='text/javascript'>new Sunlight.Highlighter({lineNumbers: true, lineNumberStart: {$start_loc}}).highlightNode(document.getElementById('${element_id}'));</script>";
 		
 		return $content;
 	}
@@ -89,19 +89,19 @@ function github_repo_content_register_shortcode() {
 
 function github_repo_content_register_dependencies() {
 	// Register syntax highlighter JS.
-	$highlight_js_path = plugins_url(
-		'google-code-prettify/prettify.js', 
+	$highlighter_js_path = plugins_url(
+		'sunlight/sunlight-all-min.js', 
 		__FILE__
 	);
 	wp_enqueue_script(
 		'syntax-highlight',
-		$highlight_js_path
+		$highlighter_js_path
 	);
 	
 	// Register syntax highlighter CSS styles.
 	wp_register_style(
 		'syntax-highlight-style-default', 
-		plugins_url('google-code-prettify/prettify.css', __FILE__)
+		plugins_url('sunlight/themes/sunlight.default.css', __FILE__)
 	);
 	wp_enqueue_style('syntax-highlight-style-default');
 }
