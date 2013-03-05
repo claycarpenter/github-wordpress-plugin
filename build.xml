@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<project name="GitHub Content WordPress Plugin" basedir=".">
+	<property environment="env" />
+
+	<property name="src.dir" 	value="src" />
+	<property name="plugin.dir" 	value="github-wordpress-plugin" />
+	<property 
+		name="plugin-install-location.dir"	
+		value="${env.GITHUB_CONTENT_PLUGIN_DEPLOY_DIR}" />
+	<property
+		name="deploy.dir"
+		value="${plugin-install-location.dir}/${plugin.dir}" />
+	
+	<target name="deploy-clean">
+		<echo message="Removing plugin deploy directory..." />
+		<delete dir="${deploy.dir}" />
+	</target>
+
+	<target name="deploy-copy">
+		<echo message="Deploying to: ${deploy.dir}" />
+
+		<mkdir dir="${deploy.dir}" />
+		<copy 
+			todir="${deploy.dir}"
+			verbose="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/.git" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deploy" depends="deploy-clean, deploy-copy">
+	</target>
+</project>
