@@ -7,12 +7,8 @@
  Author: Clay Carpenter
  */
 
-require_once('php/github_repo_content_retriever.php');
-
-//require_once ('php/logger.php');
-Logger::log_debug("Test log message from GitHub updated plugin...");
+require_once ('php/github_repo_content_retriever.php');
 
 // Instantiate the core plugin class.
-new GitHubRepoContentRetriever();
-
+new GitHubRepoContentRetriever(plugin_dir_url(__FILE__));
 ?>

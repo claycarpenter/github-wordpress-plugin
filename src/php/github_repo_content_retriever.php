@@ -6,12 +6,19 @@
 require_once ('logger.php');
 
 class GitHubRepoContentRetriever {
-	function __construct() {
+	private $plugin_dir_url;
+
+	function __construct($plugin_dir_url) {
 		// Register the page initialization hooks that will in turn register
 		// the plugin's shortcode handler and JS/CSS resource dependencies.
 		Logger::log_debug("Registering plugin hooks.");
 
-		// Execute the plugin shortcode handler registration on page initialization.
+		// Store the reference to the plugin's root URL. This will be used 
+		// later when generating URLs for the (JS, CSS) resource files.
+		$this -> plugin_dir_url = $plugin_dir_url;
+
+		// Execute the plugin shortcode handler registration on page 
+		// initialization.
 		add_action('init', array($this, 'register_shortcode'));
 
 		// Execute the file (JS, CSS) dependencies registration on init.
@@ -27,12 +34,17 @@ class GitHubRepoContentRetriever {
 
 	public function register_dependencies() {
 		// Register syntax highlighter JS.
-		$highlighter_js_path = plugins_url('sunlight/sunlight-all-min.js', __FILE__);
+		$highlighter_js_path = $this -> get_resource_url('sunlight/sunlight-all-min.js');
 		wp_enqueue_script('syntax-highlight', $highlighter_js_path);
 
 		// Register syntax highlighter CSS styles.
-		wp_register_style('syntax-highlight-style-default', plugins_url('sunlight/themes/sunlight.default.css', __FILE__));
+		$highlighter_style_path = $this -> get_resource_url('sunlight/themes/sunlight.default.css');
+		wp_register_style('syntax-highlight-style-default', $highlighter_style_path);
 		wp_enqueue_style('syntax-highlight-style-default');
+	}
+
+	private function get_resource_url($resource_path) {
+		return $this -> plugin_dir_url . $resource_path;
 	}
 
 	public function shortcode_handler($atts, $content = null) {
@@ -53,9 +65,7 @@ class GitHubRepoContentRetriever {
 		$content_request_result = wp_remote_get($content_url);
 
 		$json_result = json_decode($content_request_result['body']);
-		Logger::log_debug(print_r($json_result, true));
 		$content_encoded = $json_result -> content;
-		Logger::log_debug(print_r($content_encoded, true));
 		$content_raw = base64_decode($json_result -> content);
 		$content = $content_raw;
 
