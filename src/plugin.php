@@ -3,7 +3,7 @@
  Plugin Name: GitHub Repo Content Embedder
  Plugin URI: http://flightlessflyer.pinguinotech.com/github-wordpress-plugin
  Description: Embeds content held in a GitHub repo.
- Version: 0.0.1a
+ Version: 0.1
  Author: Clay Carpenter
  */
 
