@@ -7,8 +7,16 @@
  Author: Clay Carpenter
  */
 
+/*
+ * This file contains the core plugin code, especially the
+ * GitHubRepoContentRetriever class.
+ */
 require_once ('php/github_repo_content_retriever.php');
 
-// Instantiate the core plugin class.
+/*
+ * Instantiate the core plugin class. The sole argument will configure the
+ * plugin with the correct base URL for this plugin. That knowledge allows the
+ * plugin to accurately point to (JS, CSS) resource files.
+ */
 new GitHubRepoContentRetriever( plugin_dir_url( __FILE__ ) );
 ?>
