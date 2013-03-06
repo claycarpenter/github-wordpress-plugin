@@ -10,5 +10,5 @@
 require_once ('php/github_repo_content_retriever.php');
 
 // Instantiate the core plugin class.
-new GitHubRepoContentRetriever(plugin_dir_url(__FILE__));
+new GitHubRepoContentRetriever( plugin_dir_url( __FILE__ ) );
 ?>
