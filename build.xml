@@ -4,10 +4,10 @@
 	<property environment="env" />
 	<property name="src.dir" 	value="src" />
 	<property name="dist.dir" 	value="dist" />
-	<property name="plugin.dir" 	value="github-wordpress-plugin" />
+	<property name="plugin.dir" 	value="getgit" />
 	<property
 	name="plugin-install-location.dir"
-	value="${env.GITHUB_CONTENT_PLUGIN_DEPLOY_DIR}" />
+	value="${env.WORDPRESS_PLUGIN_DEPLOY_DIR}" />
 	<property
 	name="deploy.dir"
 	value="${plugin-install-location.dir}/${plugin.dir}" />
@@ -32,7 +32,7 @@
 	</target>
 	<target name="dist-build" depends="dist-clean">
 		<mkdir dir="${dist.dir}"/>
-		<zip destfile="${dist.dir}/plugin.zip">
+		<zip destfile="${dist.dir}/${plugin.dir}.zip">
 			<zipfileset
 			dir="${src.dir}"
 			prefix="${plugin.dir}"/>

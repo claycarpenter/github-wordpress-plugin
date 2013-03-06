@@ -1,8 +1,8 @@
 <?php
 /*
- Plugin Name: GitHub Repo Content Embedder
+ Plugin Name: GetGit
  Plugin URI: http://flightlessflyer.pinguinotech.com/github-wordpress-plugin
- Description: Embeds content held in a GitHub repo.
+ Description: Embeds content stored in a public GitHub repository.
  Version: 0.1
  Author: Clay Carpenter
  */
