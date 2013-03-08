@@ -9,12 +9,18 @@
  */
 require_once ('logger.php');
 
+/*
+ * Require the options management for support accessing user-configured plugin
+ * options.
+ */
+require_once ('options_page_manager.php');
+
 /**
  * This class contains the meat of the plugin, including the code for processing
  * the shortcode as well as retrieving and formatting the targeted GitHub repo
  * content.
- * 
- * @author Clay Carpenter 
+ *
+ * @author Clay Carpenter
  */
 class GitHubRepoContentRetriever {
 	/**
@@ -56,7 +62,8 @@ class GitHubRepoContentRetriever {
 	 * Initialize the plugin by registering the shortcode handler.
 	 */
 	public function register_shortcode( ) {
-		add_shortcode( 'github', array( $this, 'shortcode_handler' ) );
+		$plugin_shortcode = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_SHORTCODE );
+		add_shortcode( $plugin_shortcode, array( $this, 'shortcode_handler' ) );
 	}
 
 	public function register_dependencies( ) {
