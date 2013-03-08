@@ -19,29 +19,12 @@ class OptionsPageManager {
 	 * action to register the options page.
 	 */
 	function __construct( ) {
-		// Verify presence of plugin options.
-		$this -> verify_plugin_options( );
-
 		// Add the options page registration to the admin_menu WordPress action.
 		add_action( 'admin_menu', array( $this, 'register_options_page' ) );
 
 		// Add the options page's settings registration to the admin_init WordPress
 		// action.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-	}
-
-	private function verify_plugin_options( ) {
-		// Attempt to retrieve the options data for this plugin.
-		$options_data = get_option( OptionsPageConstants::$OPTIONS_DATA );
-
-		// If the retrieved value is false, the options have no yet been created.
-		if ( $option_data === FALSE ) {
-			// Create a set of default values for the options.
-			$options_data = array( OptionsPageConstants::$SETTING_SHORTCODE => 'getgit' );
-
-			// Persist the default option values.
-			update_option( OptionsPageConstants::$OPTIONS_DATA, $options_data );
-		} 
 	}
 
 	/**
@@ -73,8 +56,7 @@ class OptionsPageManager {
 	public function print_input_field_setting_shortcode( ) {
 		$options_data_name = OptionsPageConstants::$OPTIONS_DATA;
 		$setting_name = OptionsPageConstants::$SETTING_SHORTCODE;
-		$options_data = get_option( OptionsPageConstants::$OPTIONS_DATA );
-		$option_value = $options_data[ OptionsPageConstants::$SETTING_SHORTCODE ];
+		$option_value = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_SHORTCODE );
 
 		echo "<input type='text' id='{$setting_name}' name='{$options_data_name}[{$setting_name}]' value='{$option_value}'/><br/><i>The shortcode may consist of only alphabetic characters (upper and lower case).</i>";
 	}
@@ -89,6 +71,31 @@ class OptionsPageManager {
 		}
 
 		return $valid;
+	}
+
+}
+
+class OptionsManager {
+	public static function get_option_value( $option_key ) {
+		$options_data = self::get_options_data( );
+
+		return $options_data[ $option_key ];
+	}
+
+	public static function get_options_data( ) {
+		// Attempt to retrieve the options data for this plugin.
+		$options_data = get_option( OptionsPageConstants::$OPTIONS_DATA );
+
+		// If the retrieved value is false, the options have no yet been created.
+		if ( $options_data === FALSE ) {
+			// Create a set of default values for the options.
+			$options_data = array( OptionsPageConstants::$SETTING_SHORTCODE => 'getgit' );
+
+			// Persist the default option values.
+			update_option( OptionsPageConstants::$OPTIONS_DATA, $options_data );
+		}
+
+		return $options_data;
 	}
 
 }
