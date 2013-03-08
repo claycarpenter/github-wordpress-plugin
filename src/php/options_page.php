@@ -1,14 +1,12 @@
 <div class="wrap">
 
-	<div id="icon-options-general" class="icon32">
-		<br>
-	</div>
+	<?php screen_icon(); ?>
 
-	<h2>GetGit GitHub Repository Content Embedder Settings 30</h2>
+	<h2>GetGit GitHub Repository Content Embedder Settings</h2>
 
 	<form action="options.php" method="post">
-		<?php settings_fields( OptionsPageConstants::$SECTION_SHORTCODE_SETTINGS ); ?>
-		<?php do_settings_sections( OptionsPageConstants::$SECTION_SHORTCODE ); ?>
+		<?php settings_fields( OptionsPageConstants::$OPTIONS_DATA ); ?>
+		<?php do_settings_sections( OptionsPageConstants::$OPTIONS_PAGE_ID ); ?>
 
 		<?php submit_button( ); ?>
 	</form>
