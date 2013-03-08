@@ -14,9 +14,10 @@
 require_once ('php/github_repo_content_retriever.php');
 
 /*
- * This file contains the options page manangement code (registration, definition, creation).
+ * This file contains the options page manangement code (registration,
+ * definition, creation).
  */
-require_once('php/options_page_manager.php');
+require_once ('php/options_page_manager.php');
 
 /*
  * Instantiate the core plugin class. The sole argument will configure the
@@ -25,8 +26,7 @@ require_once('php/options_page_manager.php');
  */
 new GitHubRepoContentRetriever( plugin_dir_url( __FILE__ ) );
 
-if ( is_admin() ) {
-	new OptionsPageManager();
+if ( is_admin( ) ) {
+	new OptionsPageManager( );
 }
 ?>
-
