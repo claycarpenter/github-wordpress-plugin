@@ -59,7 +59,7 @@ class OptionsPageManager {
 
 		add_settings_section( OptionsPageConstants::$SECTION_SHORTCODE, 'Shortcode', array( $this, 'print_shortcode_section_info' ), OptionsPageConstants::$OPTIONS_PAGE_ID );
 
-		add_settings_field( 'test_input_id', 'GetGit Shortcode', array( $this, 'print_test_input_field' ), OptionsPageConstants::$OPTIONS_PAGE_ID, OptionsPageConstants::$SECTION_SHORTCODE );
+		add_settings_field( OptionsPageConstants::$SETTING_SHORTCODE, 'GetGit Shortcode', array( $this, 'print_input_field_setting_shortcode' ), OptionsPageConstants::$OPTIONS_PAGE_ID, OptionsPageConstants::$SECTION_SHORTCODE );
 	}
 
 	public function generate_options_view( ) {
@@ -70,7 +70,7 @@ class OptionsPageManager {
 		echo 'Configure the shortcode that launches this plugin and embeds GitHub repo content.';
 	}
 
-	public function print_test_input_field( ) {
+	public function print_input_field_setting_shortcode( ) {
 		$options_data_name = OptionsPageConstants::$OPTIONS_DATA;
 		$setting_name = OptionsPageConstants::$SETTING_SHORTCODE;
 		$options_data = get_option( OptionsPageConstants::$OPTIONS_DATA );
