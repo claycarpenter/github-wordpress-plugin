@@ -15,6 +15,11 @@ require_once ('logger.php');
  */
 require_once ('options_page_manager.php');
 
+/*
+ * Require caching support.
+ */
+require_once ('content_cache.php');
+
 /**
  * This class contains the meat of the plugin, including the code for processing
  * the shortcode as well as retrieving and formatting the targeted GitHub repo
@@ -147,23 +152,14 @@ class GitHubRepoContentRetriever {
 	 * @param	int		$stop_loc		Optional. The last line-of-code of the content to
 	 * display. If this is not provided, the default is -1 and interpreted as the
 	 * equivalent to the last line of content.
+	 * 
+	 * @return string					Raw content targeted by the provided content attributes.
 	 */
 	public static function pull_content( $user_id, $repo_id, $content_path, $language, $start_loc = 1, $stop_loc = -1 ) {
-		// Construct the URL to the GitHub content.
-		$content_url = "https://api.github.com/repos/{$user_id}/{$repo_id}/contents/{$content_path}";
-
-		Logger::log_debug( "Retrieving URL: {$content_url}" );
-
-		// Pull the content down.
-		$content_request_result = wp_remote_get( $content_url );
-
-		// The GitHub APIs will return a JSON-formatted response. Parse the body to find
-		// the file content.
-		$json_result = json_decode( $content_request_result[ 'body' ] );
-
-		// The file content is transfered as base64-encoded data. Decode the data to get
-		// the raw file content.
-		$content = base64_decode( $json_result -> content );
+		// Pull the content from the cache. If the content is not currently in the cache
+		// (or the cached content has expired), the cache proxy will pull fresh content
+		// from GitHub and store that content in the cache before returning it.
+		$content = ContentCache::get_content($user_id, $repo_id, $content_path);
 
 		// If a start or stop location has been specified, divide the content into lines
 		// and then extract the targeted lines-of-code into a new content snippet.
