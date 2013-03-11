@@ -3,7 +3,7 @@ Contributors: claycarpenter
 Tags: github, embed, code, snippet, repositories
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,6 +13,8 @@ Retrieves full files or snippets from a public GitHub repository, displaying the
 == Description ==
 
 This plugin can retrieve either the full content or a snippet from a file hosted in a public GitHub repository. The code will be displayed with syntax highlighting and line numbers.
+
+Now support content caching for improved page responsiveness and load times.
 
 Syntax highlighting is provided by the [Sunlight JS](http://sunlightjs.com/ "Sunlight JS") syntax highlighter. Many thanks to those involved in that project!
 
@@ -54,6 +56,9 @@ Currently, the syntax highlighting style choice is not user changeable. However,
 
 
 == Changelog ==
+
+= 0.2 =
+* Adds support for content caching. The caching support is provided via the Transients API. This is an initial implementation and does not allow for configuration of the cache entry expiration date.
 
 = 0.1 =
 * Initial public release.
