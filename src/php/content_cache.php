@@ -135,7 +135,7 @@ class ContentCache {
 		$separator = "_";
 		$content_attributes_id = $user_id . $separator . $repo_id . $separator . $content_path;
 
-		$cache_key = md5( 'getgit' . $separator . $content_attributes_id );
+		$cache_key = 'getgit' . $separator . md5( $content_attributes_id );
 
 		return $cache_key;
 	}
