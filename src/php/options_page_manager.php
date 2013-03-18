@@ -106,8 +106,8 @@ class OptionsPageManager {
 		$options_data_name = OptionsPageConstants::$OPTIONS_DATA;
 		$setting_name = OptionsPageConstants::$SETTING_CACHE_STATUS;
 		$option_value = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_CACHE_STATUS );
-		$enabled_checked = $option_value === 'enabled' ? " checked " : "";
-		$disabled_checked = $option_value === 'disabled' ? " checked " : "";
+		$enabled_checked = $option_value === OptionsPageConstants::$SETTING_CACHE_STATUS_VALUE_ENABLED ? " checked " : "";
+		$disabled_checked = $option_value === OptionsPageConstants::$SETTING_CACHE_STATUS_VALUE_DISABLED ? " checked " : "";
 
 		echo "<input type='radio' id='{$setting_name}_enabled' name='{$options_data_name}[{$setting_name}]' value='enabled' {$enabled_checked} /><label for='{$setting_name}_enabled'>Enabled</label><br/><input type='radio' id='{$setting_name}_disabled' name='{$options_data_name}[{$setting_name}]' value='disabled' {$disabled_checked}/><label for='{$setting_name}_disabled'>Disabled</label>";
 	}
@@ -142,7 +142,7 @@ class OptionsPageManager {
 			$valid[ OptionsPageConstants::$SETTING_SHORTCODE ] = $input[ OptionsPageConstants::$SETTING_SHORTCODE ];
 		}
 
-		if ( $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === 'enabled' || $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === 'disabled' ) {
+		if ( $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === OptionsPageConstants::$SETTING_CACHE_STATUS_VALUE_ENABLED || $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === OptionsPageConstants::$SETTING_CACHE_STATUS_VALUE_DISABLED ) {
 			// Input consists of a valid cache status flag. Proceed to persist new option.
 			$valid[ OptionsPageConstants::$SETTING_CACHE_STATUS ] = $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ];
 		}
@@ -210,7 +210,7 @@ class OptionsManager {
 
 		if ( !array_key_exists( OptionsPageConstants::$SETTING_CACHE_STATUS, $options_data ) ) {
 			// Default cache status is 'enabled'.
-			$options_data[ OptionsPageConstants::$SETTING_CACHE_STATUS ] = 'enabled';
+			$options_data[ OptionsPageConstants::$SETTING_CACHE_STATUS ] = OptionsPageConstants::$SETTING_CACHE_STATUS_VALUE_ENABLED;
 
 			$update_options = TRUE;
 		}
@@ -264,6 +264,12 @@ class OptionsPageConstants {
 	 * whether the cache will be used or not.
 	 */
 	public static $SETTING_CACHE_STATUS = 'setting_cache_status';
+
+	/**
+	 * The enabled and disabled flag values for the cache status setting.
+	 */
+	public static $SETTING_CACHE_STATUS_VALUE_ENABLED = 'enabled';
+	public static $SETTING_CACHE_STATUS_VALUE_DISABLED = 'disabled';
 
 	/**
 	 * ID/name for the cache TTL setting. This setting allows the user to configure
