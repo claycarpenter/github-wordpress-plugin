@@ -54,7 +54,8 @@ class ContentCache {
 
 				// Push content into the cache.
 				// Set the default cache expire lifetime to one hour (60 * 60s).
-				set_transient( $cache_key, $content, 60 * 60 );
+				$cache_expiry = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_CACHE_TTL );
+				set_transient( $cache_key, $content, $cache_expiry );
 			}
 		} else {
 			// Cache is not enabled. Pull down the remote content and return it directly.
