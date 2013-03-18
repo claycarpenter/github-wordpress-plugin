@@ -44,11 +44,24 @@ class OptionsPageManager {
 		// Register the options data.
 		register_setting( OptionsPageConstants::$OPTIONS_DATA, OptionsPageConstants::$OPTIONS_DATA, array( $this, 'field_submit_callback' ) );
 
+		/* Shortcode section */
+
 		// Register the Shortcode section.
 		add_settings_section( OptionsPageConstants::$SECTION_SHORTCODE, 'Shortcode', array( $this, 'print_shortcode_section_info' ), OptionsPageConstants::$OPTIONS_PAGE_ID );
 
-		// Register the shortcode setting.
+		// Register the shortcode setting field.
 		add_settings_field( OptionsPageConstants::$SETTING_SHORTCODE, 'GetGit Shortcode', array( $this, 'print_input_field_setting_shortcode' ), OptionsPageConstants::$OPTIONS_PAGE_ID, OptionsPageConstants::$SECTION_SHORTCODE );
+
+		/* Cache section */
+
+		// Register the Cache section.
+		add_settings_section( OptionsPageConstants::$SECTION_CACHE, 'Cache', array( $this, 'print_cache_section_info' ), OptionsPageConstants::$OPTIONS_PAGE_ID );
+
+		// Register the cache status setting field.
+		add_settings_field( OptionsPageConstants::$SETTING_CACHE_STATUS, 'Cache Status', array( $this, 'print_input_field_setting_cache_status' ), OptionsPageConstants::$OPTIONS_PAGE_ID, OptionsPageConstants::$SECTION_CACHE );
+
+		// Register the cache TTL setting field.
+		add_settings_field( OptionsPageConstants::$SETTING_CACHE_TTL, 'Cacheed Content TTL', array( $this, 'print_input_field_setting_cache_ttl' ), OptionsPageConstants::$OPTIONS_PAGE_ID, OptionsPageConstants::$SECTION_CACHE );
 	}
 
 	/**
@@ -68,6 +81,14 @@ class OptionsPageManager {
 	}
 
 	/**
+	 * Generates the description for the Cache section.
+	 */
+	public function print_cache_section_info( ) {
+		echo 'Configure the cache settings. Content caching allows for fewer requests to be made to the GitHub repo servers, and results in faster page load times and lower bandwidth usage.';
+	}
+
+	// TODO: This input field generation code is highly redundant.
+	/**
 	 * Generates the input field for the shortcode setting.
 	 */
 	public function print_input_field_setting_shortcode( ) {
@@ -76,6 +97,30 @@ class OptionsPageManager {
 		$option_value = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_SHORTCODE );
 
 		echo "<input type='text' id='{$setting_name}' name='{$options_data_name}[{$setting_name}]' value='{$option_value}'/><br/><i>The shortcode may consist of only alphabetic characters (upper and lower case).</i>";
+	}
+
+	/**
+	 * Generates the input field for the cache status setting.
+	 */
+	public function print_input_field_setting_cache_status( ) {
+		$options_data_name = OptionsPageConstants::$OPTIONS_DATA;
+		$setting_name = OptionsPageConstants::$SETTING_CACHE_STATUS;
+		$option_value = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_CACHE_STATUS );
+		$enabled_checked = $option_value === 'enabled' ? " checked " : "";
+		$disabled_checked = $option_value === 'disabled' ? " checked " : "";
+
+		echo "<input type='radio' id='{$setting_name}_enabled' name='{$options_data_name}[{$setting_name}]' value='enabled' {$enabled_checked} /><label for='{$setting_name}_enabled'>Enabled</label><br/><input type='radio' id='{$setting_name}_disabled' name='{$options_data_name}[{$setting_name}]' value='disabled' {$disabled_checked}/><label for='{$setting_name}_disabled'>Disabled</label>";
+	}
+
+	/**
+	 * Generates the input field for the cache TTL setting.
+	 */
+	public function print_input_field_setting_cache_ttl( ) {
+		$options_data_name = OptionsPageConstants::$OPTIONS_DATA;
+		$setting_name = OptionsPageConstants::$SETTING_CACHE_TTL;
+		$option_value = OptionsManager::get_option_value( OptionsPageConstants::$SETTING_CACHE_TTL );
+
+		echo "<input type='text' id='{$setting_name}' name='{$options_data_name}[{$setting_name}]' value='{$option_value}'/><br/><i>The cache content TTL (Time To Live) is specified in seconds.</i>";
 	}
 
 	/**
@@ -95,6 +140,17 @@ class OptionsPageManager {
 		if ( !preg_match( $alpha_only_pattern, $input[ OptionsPageConstants::$SETTING_SHORTCODE ] ) ) {
 			// Input consists of only alphabetic characters. Proceed to persist new option.
 			$valid[ OptionsPageConstants::$SETTING_SHORTCODE ] = $input[ OptionsPageConstants::$SETTING_SHORTCODE ];
+		}
+
+		if ( $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === 'enabled' || $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ] === 'disabled' ) {
+			// Input consists of a valid cache status flag. Proceed to persist new option.
+			$valid[ OptionsPageConstants::$SETTING_CACHE_STATUS ] = $input[ OptionsPageConstants::$SETTING_CACHE_STATUS ];
+		}
+
+		$digits_only_pattern = '/\D/';
+		if ( !preg_match( $digits_only_pattern, $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] ) ) {
+			// Input consists of only digits. Proceed to persist new option.
+			$valid[ OptionsPageConstants::$SETTING_CACHE_TTL ] = $input[ OptionsPageConstants::$SETTING_CACHE_TTL ];
 		}
 
 		return $valid;
@@ -135,11 +191,38 @@ class OptionsManager {
 		// Attempt to retrieve the options data for this plugin.
 		$options_data = get_option( OptionsPageConstants::$OPTIONS_DATA );
 
+		$update_options = FALSE;
+
 		// If the retrieved value is false, the options have no yet been created.
 		if ( $options_data === FALSE ) {
 			// Create a set of default values for the options.
-			$options_data = array( OptionsPageConstants::$SETTING_SHORTCODE => 'getgit' );
+			$options_data = array( );
 
+			$update_options = TRUE;
+		}
+
+		if ( !array_key_exists( OptionsPageConstants::$SETTING_SHORTCODE, $options_data ) ) {
+			// Default shortcode is 'getgit'.
+			$options_data[ OptionsPageConstants::$SETTING_SHORTCODE ] = 'getgit';
+
+			$update_options = TRUE;
+		}
+
+		if ( !array_key_exists( OptionsPageConstants::$SETTING_CACHE_STATUS, $options_data ) ) {
+			// Default cache status is 'enabled'.
+			$options_data[ OptionsPageConstants::$SETTING_CACHE_STATUS ] = 'enabled';
+
+			$update_options = TRUE;
+		}
+
+		if ( !array_key_exists( OptionsPageConstants::$SETTING_CACHE_TTL, $options_data ) ) {
+			// Default cache TTL is 1 hour (3600 seconds).
+			$options_data[ OptionsPageConstants::$SETTING_CACHE_TTL ] = 3600;
+
+			$update_options = TRUE;
+		}
+
+		if ( $update_options ) {
 			// Persist the default option values.
 			update_option( OptionsPageConstants::$OPTIONS_DATA, $options_data );
 		}
@@ -170,5 +253,22 @@ class OptionsPageConstants {
 	 * the shortcode name that will be used to start the plugin handler.
 	 */
 	public static $SETTING_SHORTCODE = 'setting_shortcode';
+
+	/**
+	 * ID for the Cache settings section.
+	 */
+	public static $SECTION_CACHE = 'section_cache';
+
+	/**
+	 * ID/name for the shortcode setting. This setting allows the user to configure
+	 * whether the cache will be used or not.
+	 */
+	public static $SETTING_CACHE_STATUS = 'setting_cache_status';
+
+	/**
+	 * ID/name for the cache TTL setting. This setting allows the user to configure
+	 * how long content will stay fresh in the (Transients) cache before expiring.
+	 */
+	public static $SETTING_CACHE_TTL = 'setting_cache_ttl';
 }
 ?>
