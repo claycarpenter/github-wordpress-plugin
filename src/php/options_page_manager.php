@@ -149,8 +149,13 @@ class OptionsPageManager {
 
 		$digits_only_pattern = '/\D/';
 		if ( !preg_match( $digits_only_pattern, $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] ) ) {
-			// Input consists of only digits. Proceed to persist new option.
-			$valid[ OptionsPageConstants::$SETTING_CACHE_TTL ] = intval( $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] );
+			// Input consists of only digits. Check to ensure it's a valid positive number
+			// above zero.
+			$int_value = intval( $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] );
+			if ( $int_value > 0 ) {
+				// New TTL value is valid. Proceed to persist new option.
+				$valid[ OptionsPageConstants::$SETTING_CACHE_TTL ] = $int_value;
+			}
 		}
 
 		return $valid;
