@@ -150,7 +150,7 @@ class OptionsPageManager {
 		$digits_only_pattern = '/\D/';
 		if ( !preg_match( $digits_only_pattern, $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] ) ) {
 			// Input consists of only digits. Proceed to persist new option.
-			$valid[ OptionsPageConstants::$SETTING_CACHE_TTL ] = $input[ OptionsPageConstants::$SETTING_CACHE_TTL ];
+			$valid[ OptionsPageConstants::$SETTING_CACHE_TTL ] = intval( $input[ OptionsPageConstants::$SETTING_CACHE_TTL ] );
 		}
 
 		return $valid;
