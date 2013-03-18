@@ -3,7 +3,7 @@
  Plugin Name: GetGit
  Plugin URI: http://flightlessflyer.pinguinotech.com/github-wordpress-plugin
  Description: Embeds content stored in a public GitHub repository.
- Version: 0.1
+ Version: 0.3
  Author: Clay Carpenter
  */
 
