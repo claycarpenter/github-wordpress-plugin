@@ -7,14 +7,13 @@ Stable tag: 0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Retrieves full files or snippets from a public GitHub repository, displaying the code in your blog with syntax highlighting.
-
+Embeds syntax-highlighted GitHub repo content into your blog posts.
 
 == Description ==
 
-This plugin can retrieve either the full content or a snippet from a file hosted in a public GitHub repository. The code will be displayed with syntax highlighting and line numbers.
+This plugin embeds the content of a public GitHub repository into your WordPress posts. It's capable of retrieving either the full content or a snippet of a file. The code will be displayed with syntax highlighting and line numbers.
 
-Now support content caching for improved page responsiveness and load times.
+Now supports content caching for improved page responsiveness and load times.
 
 Syntax highlighting is provided by the [Sunlight JS](http://sunlightjs.com/ "Sunlight JS") syntax highlighter. Many thanks to those involved in that project!
 
@@ -32,7 +31,7 @@ Attributes used by the `github` shortcode:
 
 * path - The full path to the content. This path should start at the repository root, not inclusive of the leading `/`, and terminate with the name of the target content's filename.
 
-* language - The programming language of the code contained in the content. This information will be passed to the syntax highlighter. The value must match one of the recognized values for the Sunlight JS engine. For a list of values, see the [Sunlight documentation](http://sunlightjs.com/docs.html)
+* language - The programming language of the code contained in the content. This information will be passed to the syntax highlighter. The value must match one of the recognized values for the Sunlight JS engine. For a list of values, see the [Sunlight documentation](http://sunlightjs.com/docs.html).
 
 * startloc - Optional. The starting line of code to display in the code snippet. If this attribute is ommitted, the first line of retrieved file will be the first line of code displayed in the snippet.
 
@@ -40,7 +39,7 @@ Attributes used by the `github` shortcode:
 
 = Examples = 
 
-Retrieve the `src/support.js` from the jQuery project repo:
+Retrieve `src/support.js` from the jQuery project repo:
 `[getgit repoid="jquery" userid="jquery" path="src/support.js" language="javascript"]`
 
 Retrieve lines 39 through 64 of this plugin's content retrieval class:
