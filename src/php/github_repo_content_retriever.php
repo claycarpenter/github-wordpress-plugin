@@ -189,7 +189,10 @@ class GitHubRepoContentRetriever {
 		// Targeting a single node allows the syntax highlighter to avoid re-processing
 		// code blocks that have already been highlighted.
 		$element_id = 'github-repo-content-' . rand( ) . '-id';
-
+		//Content Filtering considering the content might have </pre> tags which can expose it to abuse or simply
+		//Give mangled output.
+		// TODO : Identify if an alternative could be used to perform proper filtering
+		$content = esc_textarea($content);
 		// Create the <pre> element will wrap the content, inject the content into that
 		// element, and then follow the <pre> with a JS snippet that will execute the
 		// syntax highlighting on the content code block.
